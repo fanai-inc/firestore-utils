@@ -1,0 +1,34 @@
+{
+  "name": "firestore-utils",
+  "version": "0.0.1",
+  "description": "CLI for import/export of firestore database",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "files": [
+    "index.js",
+    "firestoreUtils.js",
+    "/lib/**/*",
+    "/utils/**/*"
+  ],
+  "bin": {
+    "firestoreUtils": "./index.js"
+  },
+  "author": "Shaun Wallace",
+  "license": "MIT",
+  "dependencies": {
+    "await-to-js": "^2.0.1",
+    "chalk": "^2.4.1",
+    "commander": "^2.16.0",
+    "envinfo": "^5.10.0",
+    "firebase-admin": "^5.12.1",
+    "inquirer": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=8.11.3"
+  },
+  "devDependencies": {
+    "dotenv": "^6.0.0"
+  }
+}
