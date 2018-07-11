@@ -16,13 +16,14 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "jest",
+    "lint": "eslint src/**",
+    "precommit": "lint-staged",
+    "format": "prettier --trailing-comma es5 --single-quote --write 'src/*/*.js' '!(node_modules)/**/*.js'"
   },
   "files": [
     "index.js",
-    "firestoreUtils.js",
-    "/lib/**/*",
-    "/utils/**/*"
+    "/src/**/*"
   ],
   "bin": {
     "firestore-utils": "./index.js"
@@ -47,6 +48,19 @@
     "node": ">=8.11.3"
   },
   "devDependencies": {
-    "dotenv": "^6.0.0"
+    "dotenv": "^6.0.0",
+    "eslint": "^5.1.0",
+    "eslint-plugin-jest": "^21.17.0",
+    "husky": "^0.14.3",
+    "jest": "^23.4.0",
+    "lint-staged": "^7.2.0",
+    "prettier": "^1.13.7"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "eslint",
+      "yarn format",
+      "git add"
+    ]
   }
 }

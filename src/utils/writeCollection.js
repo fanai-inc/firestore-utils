@@ -16,8 +16,8 @@ const write = (options = {}, cb = () => null) => collection => {
     .on('data', () => count++)
     .pipe(
       fs.createWriteStream(
-        options.out || `${process.cwd()}/${collection}.jsonl`,
-      ),
+        options.out || `${process.cwd()}/${collection}.jsonl`
+      )
     )
     .on('finish', () => {
       console.log(`${chalk.green('Success!!')}`);
@@ -25,8 +25,8 @@ const write = (options = {}, cb = () => null) => collection => {
       options.verbose &&
         console.log(
           `Total documents written for ${chalk.magenta(
-            collection,
-          )} collection: ${chalk.bold.green(count)}`,
+            collection
+          )} collection: ${chalk.bold.green(count)}`
         );
 
       cb();

@@ -17,37 +17,35 @@ program
   .alias('e')
   .option(
     '-c, --collection <collection>',
-    'specify a particular collection to export',
+    'specify a particular collection to export'
   )
   .option(
     '-d, --document <document>',
-    'specify a particular document to export',
+    'specify a particular document to export'
   )
   .option(
     '-o, --out [filePath]',
-    'specify a location to write the exported data [filePath]',
+    'specify a location to write the exported data [filePath]'
   )
   .action((databaseURL, serviceAccountConfig, options) => {
     initializeApp(databaseURL, serviceAccountConfig);
 
-    const { collection = null, document = null, out = null } = options;
+    const { collection = null, document = null } = options;
 
     if (document && !collection) {
       console.log(
         chalk.red(
           `Error: Please specify the collection that document ${chalk.cyan(
-            document,
-          )} belongs to in-order to export it`,
-        ),
+            document
+          )} belongs to in-order to export it`
+        )
       );
       process.exit(1);
     } else if (!document) {
       exportCollection(
         collection,
-        Object.assign({ verbose: program.verbose }, options),
+        Object.assign({ verbose: program.verbose }, options)
       );
-    } else {
-      // export document at given collection
     }
   });
 
@@ -57,16 +55,16 @@ program
   .alias('i')
   .option(
     '-p, --filePath [filePath]',
-    'specify the location of the collection information [filePath]',
+    'specify the location of the collection information [filePath]'
   )
   .option(
     '-c, --collection [collection]',
-    'specify the collection [collection]',
+    'specify the collection [collection]'
   )
   .option(
     '-f, --force [forceOverwrite]',
     'force overwrite a given collection [forceOverwrite]',
-    false,
+    false
   )
   .action((databaseURL, serviceAccountConfig, options) => {
     const {
@@ -80,8 +78,8 @@ program
         chalk.red(
           `Error: FilePath or collection required to perform import.
           Please check that you've supplied a filePath using -f or --filePath or
-          alternatively a collection via -c or --collection`,
-        ),
+          alternatively a collection via -c or --collection`
+        )
       );
       process.exit(1);
     }
@@ -95,7 +93,7 @@ program
         {
           force,
           verbose: program.verbose,
-        },
+        }
       );
     } catch (err) {
       console.log(err);
@@ -110,27 +108,27 @@ program
     console.log();
     console.log(
       `    Only ${chalk.green('<serviceAccountConfig>')} and ${chalk.green(
-        '<databaseURL>',
-      )} are required.`,
+        '<databaseURL>'
+      )} are required.`
     );
     console.log();
     console.log(
       `    ${chalk.green(
-        '<serviceAccountConfig>',
-      )} is the path to the admin sdk service account configuration.`,
+        '<serviceAccountConfig>'
+      )} is the path to the admin sdk service account configuration.`
     );
     console.log();
     console.log(
       `    For more information on how to obtain this config see:
-    [Admin SDK setup](https://firebase.google.com/docs/admin/setup)`,
+    [Admin SDK setup](https://firebase.google.com/docs/admin/setup)`
     );
     console.log();
     console.log(
-      `    If a document is given then a collection is also required.`,
+      `    If a document is given then a collection is also required.`
     );
     console.log();
     console.log(
-      `    Usage: export|ex <serviceAccountConfig> <databaseURL> [options]`,
+      `    Usage: export|ex <serviceAccountConfig> <databaseURL> [options]`
     );
     console.log();
     console.log(`    Export Options:`);
@@ -147,7 +145,7 @@ program
            -f, --force <force>                 Force import without prompt of overwrite.
     `);
     console.log(
-      `    If you have any problems, do not hesitate to file an issue:`,
+      `    If you have any problems, do not hesitate to file an issue:`
     );
     console.log(`    ${chalk.cyan('https://github.com/')}`);
     console.log();
@@ -167,7 +165,7 @@ if (program.info) {
         clipboard: false,
         duplicates: true,
         showNotFound: true,
-      },
+      }
     )
     .then(console.log);
 }

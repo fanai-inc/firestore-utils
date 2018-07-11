@@ -18,7 +18,7 @@ const importCollection = async (filePath, collectionName, options = {}) => {
           name: 'overwrite',
           type: 'confirm',
         },
-      ]),
+      ])
     );
 
     if (err) {
@@ -37,19 +37,18 @@ const importCollection = async (filePath, collectionName, options = {}) => {
 };
 
 const writeCollection = (filePath, collectionName, options) => {
+  const { encoding = 'utf8', objectMode = true, highWaterMark } = options;
+
   const input = fs
-    .createReadStream(
-      filePath,
-      ({ encoding = 'utf8', objectMode = true, highWaterMark } = options),
-    )
+    .createReadStream(filePath, { encoding, objectMode, highWaterMark })
     .on('error', err => console.log(`${chalk.red(err)}`));
 
   const rl = readline.createInterface({ input });
 
   console.log(
     `Preparing batch write of document(s) in: ${chalk.cyan(
-      path.basename(filePath),
-    )}`,
+      path.basename(filePath)
+    )}`
   );
 
   const db = admin.firestore();
@@ -82,8 +81,8 @@ const writeCollection = (filePath, collectionName, options) => {
     console.log(`\n${chalk.green('Success!!')}\n`);
     console.log(
       `Wrote ${chalk.red(documentCount)} documents to the ${chalk.cyan(
-        collectionName,
-      )} collection.`,
+        collectionName
+      )} collection.`
     );
 
     process.exit(0);

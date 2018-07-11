@@ -22,8 +22,8 @@ const exportCollection = async (collection, options) => {
       if (!collections.find(({ id }) => id === collection)) {
         console.log(
           chalk.red(
-            `Provided collection does not exist. Please check the provided database URL and/or the specified collection`,
-          ),
+            `Provided collection does not exist. Please check the provided database URL and/or the specified collection`
+          )
         );
         process.exit(1);
       } else {
@@ -34,9 +34,9 @@ const exportCollection = async (collection, options) => {
           console.log(
             chalk.red(
               `Error while writing documents in ${chalk.cyan(
-                collection,
-              )} collection: ${err}`,
-            ),
+                collection
+              )} collection: ${err}`
+            )
           );
           process.exit(1);
         }
@@ -54,14 +54,14 @@ const exportCollection = async (collection, options) => {
             name: 'ExportedCollections',
             type: 'checkbox',
           },
-        ]),
+        ])
       );
 
       if (err) {
         console.log(
           chalk.magenta(`
           Error listing collections: ${err}
-        `),
+        `)
         );
         process.exit(1);
       }
@@ -74,7 +74,7 @@ const exportCollection = async (collection, options) => {
         console.log(
           chalk.magenta(`
           Aborting since no collections were chosen
-        `),
+        `)
         );
         process.exit(1);
       }
