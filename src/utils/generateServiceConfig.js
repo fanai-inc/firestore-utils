@@ -1,3 +1,5 @@
+'use-strict';
+
 // prettier-ignore
 module.exports = {
   "project_id": `${process.env.FIREBASE_PROJECT}`,
