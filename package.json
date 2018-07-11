@@ -1,7 +1,19 @@
 {
-  "name": "firestore-utils",
+  "name": "@fanai/firestore-utils",
   "version": "0.0.1",
   "description": "CLI for import/export of firestore database",
+  "keywords": [
+    "javascript",
+    "nodejs",
+    "cli",
+    "firestore",
+    "firebase"
+  ],
+  "homepage": "https://github.com/fanai-inc/firestore-utils/blob/master/README.md",
+  "bugs": {
+    "url": "https://github.com/fanai-inc/firestore-utils/issues",
+    "email": "oss@fanai.io"
+  },
   "main": "index.js",
   "scripts": {
     "test": "test"
@@ -13,10 +25,16 @@
     "/utils/**/*"
   ],
   "bin": {
-    "firestoreUtils": "./index.js"
+    "firestore-utils": "./index.js"
   },
-  "author": "Shaun Wallace",
-  "license": "MIT",
+  "author": {
+    "name": "Shaun Wallace"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fanai-inc/firestore-utils"
+  },
+  "license": "Apache-2.0",
   "dependencies": {
     "await-to-js": "^2.0.1",
     "chalk": "^2.4.1",
