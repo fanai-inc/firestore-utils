@@ -7,7 +7,7 @@ language: node_js
 node_js:
   - "stable"
 install:
-  - yarn
-scripts:
+  - yarn install
+script:
   - yarn lint
   - yarn test
