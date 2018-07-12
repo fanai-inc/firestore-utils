@@ -1,0 +1,13 @@
+cache:
+  directories:
+    - "node_modules"
+env:
+  - NODE_ENV=production
+language: node_js
+node_js:
+  - "stable"
+install:
+  - yarn
+scripts:
+  - yarn lint
+  - yarn test
