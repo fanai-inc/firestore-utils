@@ -3,8 +3,8 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
 cache:
   yarn: true
-  directories:
-    - "node_modules"
+  # directories:
+  #   - "node_modules"
 env:
   - NODE_ENV=production
 language: node_js
