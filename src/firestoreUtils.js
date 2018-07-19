@@ -17,15 +17,23 @@ program
   .alias('e')
   .option(
     '-c, --collection <collection>',
-    'specify a particular collection to export'
+    'specify a particular collection to export, or a comma separated list of collection names'
   )
   .option(
     '-d, --document <document>',
     'specify a particular document to export'
   )
   .option(
-    '-o, --out [filePath]',
-    'specify a location to write the exported data [filePath]'
+    '-o, --out <filePath>',
+    'specify a location to write the exported data <filePath>'
+  )
+  .option(
+    '-b, --bucket <bucketName>',
+    'specify a google storage bucket to write to'
+  )
+  .option(
+    '-g, --bucketOptions <bucketOptionsFilePath>',
+    'specify a google storage bucket to write to <bucketOptionsFilePath>\n This file is required and configuratino options can be found at: https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream'
   )
   .action((databaseURL, serviceAccountConfig, options) => {
     initializeApp(databaseURL, serviceAccountConfig);
@@ -106,16 +114,15 @@ program
   .option('--info', 'print environment debug info')
   .on('--help', () => {
     console.log();
-    console.log(
-      `    Only ${chalk.green('<serviceAccountConfig>')} and ${chalk.green(
-        '<databaseURL>'
-      )} are required.`
-    );
+    console.log(`    Only ${chalk.green('<databaseURL>')} is required.`);
     console.log();
     console.log(
       `    ${chalk.green(
-        '<serviceAccountConfig>'
-      )} is the path to the admin sdk service account configuration.`
+        '[serviceAccountConfig]'
+      )} is the path to the admin sdk service account configuration.
+         Or it is alternatively set via the environmental variable $GOOGLE_APPLICATION_CREDENTIALS.
+         See [Authentication Getting Started](https://cloud.google.com/docs/authentication/getting-started)
+      `
     );
     console.log();
     console.log(
@@ -128,7 +135,9 @@ program
     );
     console.log();
     console.log(
-      `    Usage: export|ex <serviceAccountConfig> <databaseURL> [options]`
+      `    Usage:
+           export|e <databaseURL> [serviceAccountConfig] [options]
+           import|i <databaseURL> [serviceAccountConfig] [options]`
     );
     console.log();
     console.log(`    Export Options:`);
