@@ -16,8 +16,8 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "lint": "eslint src/**",
+    "test": "./node_modules/.bin/jest",
+    "lint": "./node_modules/.bin/eslint src/**",
     "precommit": "lint-staged",
     "format": "prettier --trailing-comma es5 --single-quote --write 'src/*/*.js' '!(node_modules)/**/*.js'"
   },
