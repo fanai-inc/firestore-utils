@@ -16,7 +16,7 @@ program
   .description('Export document(s) / collection(s) from the specified database')
   .alias('e')
   .option(
-    '-c, --collection <collection>',
+    '-c, --collections <collections>',
     'specify a particular collection to export, or a comma separated list of collection names'
   )
   .option(
@@ -33,7 +33,7 @@ program
   )
   .option(
     '-g, --bucketOptions <bucketOptionsFilePath>',
-    'specify a google storage bucket to write to <bucketOptionsFilePath>\n This file is required and configuratino options can be found at: https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream'
+    'specify a google storage bucket to write to <bucketOptionsFilePath>\n This file is required and configuration options can be found at: https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream'
   )
   .action((databaseURL, serviceAccountConfig, options) => {
     initializeApp(databaseURL, serviceAccountConfig);

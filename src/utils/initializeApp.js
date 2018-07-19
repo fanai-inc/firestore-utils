@@ -4,12 +4,12 @@ const chalk = require('chalk');
 const fs = require('fs');
 const admin = require('firebase-admin');
 
-const initializeApp = (databaseURL, serviceAccountConfig) => {
+const initializeApp = (databaseURL, serviceAccountConfig, options) => {
   console.log(chalk.cyan(`Connecting to firestore project...`));
   let config =
     serviceAccountConfig || process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
-  if (!config) {
+  if (!config && !options.useApplicationDefault) {
     console.log(
       chalk.red(`
       Error initializing firebase project:
@@ -27,30 +27,37 @@ const initializeApp = (databaseURL, serviceAccountConfig) => {
     process.exit(1);
   }
 
-  // assume file path rather than json
-  if (!/(^{|^"{)/.test(config)) {
-    config = fs.readFileSync(config, 'utf8', err => {
-      if (err) {
-        console.log(chalk.red(`Unable to read service account config: ${err}`));
-        process.exit(1);
-      }
-    });
-  }
+  if (config) {
+    // assume file path rather than json
+    if (!/(^{|^"{)/.test(config)) {
+      config = fs.readFileSync(config, 'utf8', err => {
+        if (err) {
+          console.log(
+            chalk.red(`Unable to read service account config: ${err}`)
+          );
+          process.exit(1);
+        }
+      });
+    }
 
-  try {
-    config = JSON.parse(config);
-  } catch (err) {
-    console.log(
-      chalk.red(
-        `Unable to parse service account config please make sure the config is valid JSON: ${err}`
-      )
-    );
-    process.exit(1);
+    try {
+      config = JSON.parse(config);
+    } catch (err) {
+      console.log(
+        chalk.red(
+          `Unable to parse service account config please make sure the config is valid JSON: ${err}`
+        )
+      );
+      process.exit(1);
+    }
   }
 
   try {
     admin.initializeApp({
-      credential: admin.credential.cert(config),
+      credential:
+        (config && admin.credential.cert(config)) ||
+        (options.useApplicationDefault &&
+          admin.credential.applicationDefault()),
       databaseURL,
     });
     console.log(chalk.green(`Connection successful!!!`));

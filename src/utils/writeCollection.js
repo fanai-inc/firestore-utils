@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const jsonl = require('./jsonl');
 const path = require('path');
 const base64 = require('base64-stream');
+const Passthrough = require('stream').PassThrough;
 
 const write = (options = {}, cb = () => null) => collection => {
   let count = 0;
@@ -36,7 +37,7 @@ const write = (options = {}, cb = () => null) => collection => {
       .stream()
       .pipe(jsonl(options))
       .on('data', () => count++)
-      .pipe(base64.encode())
+      .pipe(options.bucket ? base64.encode() : new Passthrough())
       .pipe(outStream)
       .on('finish', () => {
         console.log(
