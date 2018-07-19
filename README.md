@@ -10,21 +10,17 @@ Currently, these utilities do not support the following features:
 - Document/Sub-collection instance export
 - Pause/Resume for collection import for large collections _(current limit is **500** document batch writes)_
 
+Multiple collections can be exported to your local file system or to a Google Cloud Storage Bucket. In the case of sending to a Google bucket the data is base64 encoded prior to being sent.
+
 ## Overview
 
 This CLI offers the capability to export collections from a specified Firestore database using the [admin SDK](https://firebase.google.com/docs/admin/setup).
 
 ### Usage
 
-For both `import` and `export` a path to the service account configuration can be provided as the second argument to either command. If this value is not present then the application will look for the following environmental variables to generate a service config at runtime. The following environmental variables are required.
+For both `import` and `export` a path to the service account configuration can be provided as the second argument to either command. If this value is not present then the application will look for the following environmental variable to generate a service config at runtime. The following environmental variable is required when a path to a service config is not specified.
 
-- `FIREBASE_PROJECT`
-- `FIREBASE_PRIVATE_KEY`
-- `FIREBASE_EMAIL_ID`
-
-The above correspond to values in the service config with the exception of the `FIREBASE_EMAIL_ID` which is the value `<your-email-id>` in the below string which can also be found in the service config. For local development it might be easier to set these values up in an .env file which will be imported automatically if in an environment other than production, i.e. the process.env.NODE_ENV !== production.
-
-`firebase-adminsdk-<your-email-id>@<your-project-id>.iam.gserviceaccount.com`
+- `GOOGLE_APPLICATION_CREDENTIALS`
 
 #### Supported Commands
 
@@ -40,10 +36,12 @@ OR
 e <databaseURL> [path/to/serviceAccountConfig.json]
 ```
 
-- `-c`, `--collection` `<collectionName>` - name of an individual collection to be exported.
+- `-c`, `--collections` `<collectionNames>` - comma separated list of collections to be exported.
   If not supplied then a list of all available collections located at `<databaseURL>` will be listed for selection.
 - `-d`, `--document` `<documentID>`- Specific document within a collection to export **NOTE**: if document is provided then the `<collectionName>` is also required. (This feature is currently not supported).
-- `-o`, `--out` `<path>`- Path to write out the contents of the exported collections. By default this is the current working directory.
+- `-o`, `--out` `<filePath>`- Path to write out the contents of the exported collections. By default this is the current working directory. This path is also used with the Google Storage Bucket path if the `--bucket` option is supplied.
+- `-b`, `--bucket` - Bucket name that the exported collections should be stored
+- `-g`, `--bucketOptions - Options for storing in Google storage. More can be found [here](https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream)
 
 ##### Import
 
