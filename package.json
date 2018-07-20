@@ -49,7 +49,6 @@
     "node": ">=8.11.3"
   },
   "devDependencies": {
-    "dotenv": "^6.0.0",
     "eslint": "^5.1.0",
     "eslint-plugin-jest": "^21.17.0",
     "husky": "^0.14.3",

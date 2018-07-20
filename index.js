@@ -1,10 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
-
 const chalk = require('chalk');
 const packageJson = require('./package.json');
 
