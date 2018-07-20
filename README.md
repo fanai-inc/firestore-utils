@@ -18,9 +18,11 @@ This CLI offers the capability to export collections from a specified Firestore 
 
 ### Usage
 
-For both `import` and `export` a path to the service account configuration can be provided as the second argument to either command. If this value is not present then the application will look for the following environmental variable to generate a service config at runtime. The following environmental variable is required when a path to a service config is not specified.
+For both `import` and `export` a path to the service account configuration can be provided as the second argument to either command. If this value is *NOT* present then the application will look for the following environmental variable to generate a service config at runtime.
 
 - `GOOGLE_APPLICATION_CREDENTIALS`
+
+The above variable is required when a path to a service config is not specified. If you are running this in the context of a GCP then more can be found [here](https://cloud.google.com/docs/authentication/production)
 
 #### Supported Commands
 
@@ -41,7 +43,7 @@ e <databaseURL> [path/to/serviceAccountConfig.json]
 - `-d`, `--document` `<documentID>`- Specific document within a collection to export **NOTE**: if document is provided then the `<collectionName>` is also required. (This feature is currently not supported).
 - `-o`, `--out` `<filePath>`- Path to write out the contents of the exported collections. By default this is the current working directory. This path is also used with the Google Storage Bucket path if the `--bucket` option is supplied.
 - `-b`, `--bucket` - Bucket name that the exported collections should be stored
-- `-g`, `--bucketOptions - Options for storing in Google storage. More can be found [here](https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream)
+- `-g`, `--bucketOptions` - Options for storing in Google storage. More can be found [here](https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream)
 
 ##### Import
 
