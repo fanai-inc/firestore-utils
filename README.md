@@ -18,7 +18,7 @@ This CLI offers the capability to export collections from a specified Firestore 
 
 ### Usage
 
-For both `import` and `export` a path to the service account configuration can be provided as the second argument to either command. If this value is *NOT* present then the application will look for the following environmental variable to generate a service config at runtime.
+For both `import` and `export` a path to the service account configuration can be provided as the second argument to either command. If this value is _NOT_ present then the application will look for the following environmental variable to generate a service config at runtime.
 
 - `GOOGLE_APPLICATION_CREDENTIALS`
 
@@ -32,12 +32,6 @@ The above variable is required when a path to a service config is not specified.
 export <databaseURL> [path/to/serviceAccountConfig.json]
 ```
 
-OR
-
-```sh
-e <databaseURL> [path/to/serviceAccountConfig.json]
-```
-
 - `-c`, `--collections` `<collectionNames>` - comma separated list of collections to be exported.
   If not supplied then a list of all available collections located at `<databaseURL>` will be listed for selection.
 - `-d`, `--document` `<documentID>`- Specific document within a collection to export **NOTE**: if document is provided then the `<collectionName>` is also required. (This feature is currently not supported).
@@ -49,12 +43,6 @@ e <databaseURL> [path/to/serviceAccountConfig.json]
 
 ```sh
 import <databaseURL> [path/to/serviceAccountConfig.json]
-```
-
-OR
-
-```sh
-i <databaseURL> [path/to/serviceAccountConfig.json]
 ```
 
 - `-p`, `--filePath` `<filePath>` - Path to collection. If this is not specified then the collection argument is required. If collection is provided and not the file path then process.cwd() is used by default and the default file extension is .jsonl.
