@@ -1,6 +1,6 @@
 {
   "name": "@fanai/firestore-utils",
-  "version": "0.0.1-alpha.3",
+  "version": "0.0.1-alpha.4",
   "description": "CLI for import/export of firestore database",
   "keywords": [
     "javascript",
@@ -43,7 +43,8 @@
     "commander": "^2.16.0",
     "envinfo": "^5.10.0",
     "firebase-admin": "^5.12.1",
-    "inquirer": "^6.0.0"
+    "inquirer": "^6.0.0",
+    "minimatch": "^3.0.4"
   },
   "engines": {
     "node": ">=8.11.3"

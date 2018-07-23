@@ -32,8 +32,8 @@ The above variable is required when a path to a service config is not specified.
 export <databaseURL> [path/to/serviceAccountConfig.json]
 ```
 
-- `-c`, `--collections` `<collectionNames>` - comma separated list of collections to be exported.
-  If not supplied then a list of all available collections located at `<databaseURL>` will be listed for selection.
+- `-c`, `--collections` `<collectionLookupPattern>` - Glob pattern used to perform collections that match within the specified Firestore database. More information on supported glob patterns can be found in the [minimatch docs](https://github.com/isaacs/minimatch)<br />
+  If a collection glob is not supplied then a list of all available collections located at `<databaseURL>` will be listed for selection as part of the CLI.
 - `-d`, `--document` `<documentID>`- Specific document within a collection to export **NOTE**: if document is provided then the `<collectionName>` is also required. (This feature is currently not supported).
 - `-o`, `--out` `<filePath>`- Path to write out the contents of the exported collections. By default this is the current working directory. This path is also used with the Google Storage Bucket path if the `--bucket` option is supplied.
 - `-b`, `--bucket` - Bucket name that the exported collections should be stored

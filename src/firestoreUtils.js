@@ -17,7 +17,7 @@ program
   .alias('e')
   .option(
     '-c, --collections <collections>',
-    'specify a particular collection to export, or a comma separated list of collection names'
+    'specify a particular collection or collections to export, based on a specified glob pattern. Glob pattern documentation can be found at https://github.com/isaacs/minimatch'
   )
   .option(
     '-d, --document <document>',
@@ -38,9 +38,9 @@ program
   .action((databaseURL, serviceAccountConfig, options) => {
     initializeApp(databaseURL, serviceAccountConfig);
 
-    const { collection = null, document = null } = options;
+    const { collections = null, document = null } = options;
 
-    if (document && !collection) {
+    if (document && !collections) {
       console.log(
         chalk.red(
           `Error: Please specify the collection that document ${chalk.cyan(
@@ -51,7 +51,7 @@ program
       process.exit(1);
     } else if (!document) {
       exportCollection(
-        collection,
+        collections,
         Object.assign({ verbose: program.verbose }, options)
       );
     }
@@ -142,9 +142,9 @@ program
     console.log();
     console.log(`    Export Options:`);
     console.log(`
-           -c, --collection <collectionRef>    Name of the collection to export,
-           -d, --document <documentRef>        Name of the document within a given collection to export,
-           -o, --out <fileName>, <filePath>    Filename and path to write the exported data to. Path defaults to process.cwd()
+           -c, --collections <collectionLookupPattern>    Glob pattern used to find matches against collections in a given database,
+           -d, --document <documentRef>                   Name of the document within a given collection to export,
+           -o, --out <fileName>, <filePath>               Filename and path to write the exported data to. Path defaults to process.cwd()
     `);
     console.log();
     console.log(`    Import Options:`);

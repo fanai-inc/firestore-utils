@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const fs = require('fs');
 const admin = require('firebase-admin');
 
-const initializeApp = (databaseURL, serviceAccountConfig, options) => {
+const initializeApp = (databaseURL, serviceAccountConfig, options = {}) => {
   console.log(chalk.cyan(`Connecting to firestore project...`));
   let config =
     serviceAccountConfig || process.env.GOOGLE_APPLICATION_CREDENTIALS;
