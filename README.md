@@ -51,6 +51,7 @@ export <databaseURL> [path/to/serviceAccountConfig.json]
 - `-o`, `--out` `<filePath>`- Path to write out the contents of the exported collections. By default this is the current working directory. This path is also used with the Google Storage Bucket path if the `--bucket` option is supplied.
 - `-b`, `--bucket` - Bucket name that the exported collections should be stored
 - `-g`, `--bucketOptions` - Options for storing in Google storage. More can be found [here](https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream)
+- `-s`, `--defaultServiceAccount`, - If set then Firebase authentication will attempt to use the default credentials which are present when running within GCP. More information can be found [here](https://firebase.google.com/docs/admin/setup)
 
 ##### Import
 
