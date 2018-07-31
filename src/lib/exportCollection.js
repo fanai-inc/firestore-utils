@@ -10,8 +10,6 @@ const padDate = require('../utils/padDate');
 const write = require('../utils/writeCollection');
 
 const exportCollection = async (collectionLookupPattern, options) => {
-  console.log(collectionLookupPattern);
-
   const [err, collections] = await to(admin.firestore().getCollections());
   // check that the collection actually exists
   if (err) {
@@ -34,7 +32,7 @@ const exportCollection = async (collectionLookupPattern, options) => {
       console.log(chalk.red('No collections found'));
       process.exit(1);
     } else if (collectionLookupPattern) {
-      // get collections specified by argv passed in based using minimatch
+      // get collections specified by glob using minimatch
       // https://www.npmjs.com/package/minimatch
       const foundCollections = minimatch
         .match(

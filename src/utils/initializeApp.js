@@ -6,10 +6,9 @@ const admin = require('firebase-admin');
 
 const initializeApp = (databaseURL, serviceAccountConfig, options = {}) => {
   console.log(chalk.cyan(`Connecting to firestore project...`));
-  let config =
-    serviceAccountConfig || process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  let config;
 
-  if (!config && !options.useApplicationDefault) {
+  if (!serviceAccountConfig && !options.defaultServiceAccount) {
     console.log(
       chalk.red(`
       Error initializing firebase project:
@@ -27,7 +26,7 @@ const initializeApp = (databaseURL, serviceAccountConfig, options = {}) => {
     process.exit(1);
   }
 
-  if (config) {
+  if (serviceAccountConfig) {
     // assume file path rather than json
     if (!/(^{|^"{)/.test(config)) {
       config = fs.readFileSync(config, 'utf8', err => {
@@ -53,14 +52,14 @@ const initializeApp = (databaseURL, serviceAccountConfig, options = {}) => {
   }
 
   try {
+    const credential =
+      (config && admin.credential.cert(config)) ||
+      (options.defaultServiceAccount && admin.credential.applicationDefault());
+
     admin.initializeApp({
-      credential:
-        (config && admin.credential.cert(config)) ||
-        (options.useApplicationDefault &&
-          admin.credential.applicationDefault()),
+      credential,
       databaseURL,
     });
-    console.log(chalk.green(`Connection successful!!!`));
   } catch (err) {
     console.log(chalk.red(`Error initializing firebase project: ${err}`));
     process.exit(1);

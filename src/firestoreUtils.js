@@ -35,8 +35,12 @@ program
     '-g, --bucketOptions <bucketOptionsFilePath>',
     'specify a google storage bucket to write to <bucketOptionsFilePath>\n This file is required and configuration options can be found at: https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream'
   )
+  .option(
+    '-s, --defaultServiceAccount',
+    'if set then Firebase authentication will attempt to use the default credentials which are present when running within GCP. More information can be found at: https://firebase.google.com/docs/admin/setup'
+  )
   .action((databaseURL, serviceAccountConfig, options) => {
-    initializeApp(databaseURL, serviceAccountConfig);
+    initializeApp(databaseURL, serviceAccountConfig, options);
 
     const { collections = null, document = null } = options;
 
@@ -144,7 +148,8 @@ program
     console.log(`
            -c, --collections <collectionLookupPattern>    Glob pattern used to find matches against collections in a given database,
            -d, --document <documentRef>                   Name of the document within a given collection to export,
-           -o, --out <fileName>, <filePath>               Filename and path to write the exported data to. Path defaults to process.cwd()
+           -o, --out <fileName>, <filePath>               Filename and path to write the exported data to. Path defaults to process.cwd(),
+           -s, --defaultServiceAccount                    Flag that tells the application to lookup the default service account credentials
     `);
     console.log();
     console.log(`    Import Options:`);

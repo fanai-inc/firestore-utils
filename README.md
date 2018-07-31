@@ -22,7 +22,20 @@ For both `import` and `export` a path to the service account configuration can b
 
 - `GOOGLE_APPLICATION_CREDENTIALS`
 
-The above variable is required when a path to a service config is not specified. If you are running this in the context of a GCP then more can be found [here](https://cloud.google.com/docs/authentication/production)
+The above variable is required when a path to a service config is not specified. If you are running this in the context of a GCP then more can be found [here](https://cloud.google.com/docs/authentication/production).
+
+For local development and testing of exported collections you can optionally set this variable like so:
+
+`export GOOGLE_APPLICATION_CREDENTIALS=`path/to/local/service/config'`
+
+Additionally, you can use the `-s` flag which will cause the application to try and authenticate using Google Application Default Credentials to initialize Firebase. An example can be found below and additional information can be found here: [Firebase Admin Setup](https://firebase.google.com/docs/admin/setup).
+
+```
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+  databaseURL: 'https://<DATABASE_NAME>.firebaseio.com'
+});
+```
 
 #### Supported Commands
 
