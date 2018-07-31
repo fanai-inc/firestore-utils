@@ -13,20 +13,33 @@ const write = (options = {}, cb = () => null) => collection => {
   const outStream = (() => {
     if (options.bucket) {
       // attempt to write to GCloud Storage bucket
-      const storage = require('@google-cloud/storage')();
-      const bucket = storage.bucket(options.bucket);
+      try {
+        const storage = require('@google-cloud/storage')();
+        const bucket = storage.bucket(options.bucket);
 
-      return bucket
-        .file(
-          `${path.normalize(
-            `/${options.filePath || process.cwd()}/`
-          )}${collection}.jsonl`
-        )
-        .createWriteStream(options.bucketOptions);
+        return bucket
+          .file(`${path.normalize(`/${options.filePath}/`)}${collection}.jsonl`)
+          .createWriteStream(options.bucketOptions);
+      } catch (err) {
+        console.log(
+          chalk.red(
+            `Error with bucket: ${
+              options.bucket
+            }. Please make sure the bucket name exists. ${JSON.stringify(err)}`
+          )
+        );
+        process.exit(1);
+      }
     } else {
-      return fs.createWriteStream(
-        options.out || `${process.cwd()}/${collection}.jsonl`
-      );
+      if (options.out && fs.lstatSync(options.out).isDirectory()) {
+        return fs.createWriteStream(
+          path.normalize(`${options.out}/${collection}.jsonl`)
+        );
+      } else {
+        return fs.createWriteStream(
+          path.normalize(options.out || `${process.cwd()}/${collection}.jsonl`)
+        );
+      }
     }
   })();
 
