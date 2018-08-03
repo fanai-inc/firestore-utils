@@ -1,8 +1,7 @@
 # Firebase - Cloud Firestore Utilities
 
-[![David badge](https://david-dm.org/fanai/firestore-utils.svg)](https://david-dm.org/fanai/firestore-utils.svg)
-
 [![npm](https://img.shields.io/npm/dt/@fanai/firestore-utils.svg)](https://www.npmjs.com/package/@fanai/firestore-utils)
+[![David badge](https://david-dm.org/fanai/firestore-utils.svg)](https://david-dm.org/fanai/firestore-utils.svg)
 
 While Cloud Firestore is in Beta these utility scripts provide a CLI and an optional javascript API for exporting collections and documents as well as importing those back into your Firestore database.
 
