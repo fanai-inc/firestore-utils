@@ -1,7 +1,5 @@
 # Firebase - Cloud Firestore Utilities
 
-[![Known Vulnerabilities](https://snyk.io/test/github/fanai-inc/firestore-utils/badge.svg)](https://snyk.io/test/github/fanai-inc/firestore-utils)
-
 [![David badge](https://david-dm.org/fanai/firestore-utils.svg)](https://david-dm.org/fanai/firestore-utils.svg)
 
 [![npm](https://img.shields.io/npm/dt/@fanai/firestore-utils.svg)](https://www.npmjs.com/package/@fanai/firestore-utils)
@@ -50,13 +48,14 @@ admin.initializeApp({
 export [path/to/serviceAccountConfig.json]
 ```
 
-- `-c`, `--collections` `<collectionLookupPattern>` - The `c, collections` argument can be the name of a collection at the root of the db, or alternatively a glob pattern used to perform a lookup for collections within the specified Firestore database at the root level. If neither are provided the lookup is made againt '\*' so essentially all collections are exported. If a path to a subcollection is given, e.g. `collection/doc/subcollection` then a lookup for that subcollection is performed and, if found, only that subcollection will be exported. More information on supported glob patterns can be found in the [minimatch docs](https://github.com/isaacs/minimatch)<br />
-  If a glob is not supplied, and the CLI is used then all available collections at the root of the db are listed for selection prior to being exported.
-- `-d`, `--document` `<documentPath>`- Specific document within a collection to export **NOTE**: If the document and collection are both provided then they will be concatenated and a lookup at that combined path will be used. For example, running `export -c someCollection -d someDocument` will result in a path lookup of `someCollection/someDocument`. So it is not a requirement to provide both options. Simply use `export -d someCollection/someDocument`.
-- `-o`, `--out` `<filePath>`- Path to write out the contents of the exported collections. By default this is the current working directory. This path is also used with the Google Storage Bucket path if the `--bucket` option is supplied.
-- `-b`, `--bucket` - Bucket name that the exported collections should be stored
-- `-g`, `--bucketOptions` - Options for storing in Google storage. More can be found [here](https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream)
-- `-s`, `--defaultServiceAccount`, - If set then Firebase authentication will attempt to use the default credentials which are present when running within GCP. More information can be found [here](https://firebase.google.com/docs/admin/setup)
+- `-c`, `--collections` `<collectionLookupPattern>` - The `c, collections` argument can be the name of a collection at the root of the db, or alternatively a glob pattern used to perform a lookup for collections within the specified Firestore database at the root level.
+  <br /><br />If neither are provided the lookup is made againt '\*' so essentially all collections are exported. If a path to a subcollection is given, e.g. `collection/doc/subcollection` then a lookup for that subcollection is performed and, if found, only that subcollection will be exported. More information on supported glob patterns can be found in the [minimatch docs](https://github.com/isaacs/minimatch)<br /><br />
+  If a glob is not supplied, and the CLI is used then all available collections at the root of the db are listed for selection prior to being exported.<br /><br />
+- `-d`, `--document` `<documentPath>`- Specific document within a collection to export **NOTE**: If the document and collection are both provided then they will be concatenated and a lookup at that combined path will be used. For example, running `export -c someCollection -d someDocument` will result in a path lookup of `someCollection/someDocument`. So it is not a requirement to provide both options. Simply use `export -d someCollection/someDocument`.<br /><br />
+- `-o`, `--out` `<filePath>`- Path to write out the contents of the exported collections. By default this is the current working directory. This path is also used with the Google Storage Bucket path if the `--bucket` option is supplied.<br /><br />
+- `-b`, `--bucket` - Bucket name that the exported collections should be stored<br /><br />
+- `-g`, `--bucketOptions` - Options for storing in Google storage. More can be found [here](https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream)<br /><br />
+- `-s`, `--defaultServiceAccount`, - If set then Firebase authentication will attempt to use the default credentials which are present when running within GCP. More information can be found [here](https://firebase.google.com/docs/admin/setup)<br /><br />
 - `-q`, `--query`, Option allows for a query to be run against any returned documents from a given collection. The format of the query should be a comma separated list internally is split on that delimeter and each resulting index in the array should match the parameters described [here](https://cloud.google.com/nodejs/docs/reference/firestore/0.15.x/Query#where). More on queries can be found [here](https://cloud.google.com/nodejs/docs/reference/firestore/0.15.x/Query). _NOTE_ Currently compound queries are not supported.
 
 ##### Import
@@ -75,7 +74,7 @@ Additional information on options and usage can be found by running `--help`
 ##### Export
 
 ```
-const firestore = require('./firestoreUtils');
+const firestore = require('firestoreUtils');
 // initialize with the admin sdk
 firestore.initialize();
 
