@@ -6,83 +6,64 @@ const admin = require('firebase-admin');
 const chalk = require('chalk');
 const minimatch = require('minimatch');
 
-const padDate = require('../utils/padDate');
+const formFilePath = require('../utils/formFilePath');
 const write = require('../utils/writeCollection');
+const exitOnError = require('../utils/exitOnError');
 
-const exportCollection = async (collectionLookupPattern, options) => {
+const exportCollection = async (collectionLookupPattern, options = {}) => {
+  // query all root level collections
   const [err, collections] = await to(admin.firestore().getCollections());
-  // check that the collection actually exists
+
   if (err) {
-    console.log(chalk.red(`Error retrieving collections: ${err}`));
-    process.exit(1);
-  } else {
-    const date = new Date();
-    // build the storage path which defaults to firebase/yyyy/mm/dd/UTCtimestamp
-    const storagePath =
-      options.filePath ||
-      `firebase/${date.getUTCFullYear()}/${padDate(
-        date.getUTCMonth() + 1
-      )}/${padDate(date.getUTCDate())}/${date.toISOString()}`;
+    exitOnError(`Error retrieving collections: ${err}`);
+  }
 
-    // form the path to store the exported collections
-    options = Object.assign({}, options, { filePath: storagePath });
-    const writeCollection = write(options);
+  let collectionsToExport = [];
+  let subCollection = false;
 
-    if (!collections.length) {
-      console.log(chalk.red('No collections found'));
-      process.exit(1);
-    } else if (collectionLookupPattern) {
-      // get collections specified by glob using minimatch
-      // https://www.npmjs.com/package/minimatch
-      const foundCollections = minimatch
-        .match(
-          collections.map(({ id }) => id),
-          collectionLookupPattern,
-          (options.glob = {})
-        )
-        .filter(Boolean);
+  // if the lookupPattern is in the format of col/[col|doc]+
+  // assume the lookup pattern is to a specific subcollection
+  if (
+    collectionLookupPattern &&
+    collectionLookupPattern.split('/').filter(Boolean).length > 1
+  ) {
+    try {
+      const collectionRef = admin
+        .firestore()
+        .collection(collectionLookupPattern);
 
-      if (!foundCollections.length) {
-        console.log(
-          chalk.red(
-            `No collections found based on the provided lookup pattern supplied: ${collectionLookupPattern}`
-          )
+      // verify the collection was found and if it has a parent then we know this is a subcollection
+      if (collectionRef && collectionRef.parent) {
+        collectionsToExport = [collectionRef.path];
+        subCollection = true;
+      } else {
+        // log error since this is a document an not a subcollection
+        exitOnError(
+          `Error retrieving collection, please verify that the path provided points to a collectionRef and not a document`
         );
-
-        process.exit(1);
       }
+    } catch (err) {
+      exitOnError(err);
+    }
+  } else {
+    // filter collections specified by glob using minimatch https://www.npmjs.com/package/minimatch
+    collectionsToExport = minimatch
+      .match(
+        collections.map(({ id }) => id),
+        collectionLookupPattern || '*',
+        (options.glob = {})
+      )
+      .filter(Boolean);
 
-      console.log(
-        chalk.cyan(
-          `Attempting to export collections: \n${chalk.magenta(
-            foundCollections.join('\n')
-          )}`
-        )
-      );
-
-      foundCollections.forEach(collection => {
-        // fetch all documents in the collection
-        try {
-          writeCollection(collection);
-        } catch (err) {
-          console.log(
-            chalk.red(
-              `Error while exporting documents in ${chalk.cyan(
-                collection
-              )} collection: ${err}`
-            )
-          );
-          process.exit(1);
-        }
-      });
-    } else {
+    // prompt the user with collections they can export
+    if (options.cli) {
       // list all collections
       const prompt = inquirer.createPromptModule();
 
       const [err, selections] = await to(
         prompt([
           {
-            choices: collections.map(({ id }) => id),
+            choices: collectionsToExport,
             message:
               'Which of the following collections would you like to export?',
             name: 'ExportedCollections',
@@ -92,41 +73,61 @@ const exportCollection = async (collectionLookupPattern, options) => {
       );
 
       if (err) {
-        console.log(
-          chalk.magenta(`
-          Error listing collections: ${err}
-        `)
-        );
-        process.exit(1);
+        exitOnError(chalk.magenta(`Error listing collections: ${err}`));
       }
 
-      const selectedCollections = selections.ExportedCollections;
+      collectionsToExport = selections.ExportedCollections;
 
-      if (selectedCollections.length) {
-        selectedCollections.forEach(collection => {
-          try {
-            writeCollection(collection);
-          } catch (err) {
-            console.log(
-              chalk.red(
-                `Error while exporting documents in ${chalk.cyan(
-                  collection
-                )} collection: ${err}`
-              )
-            );
-            process.exit(1);
-          }
-        });
-      } else {
-        console.log(
+      if (!collectionsToExport.length) {
+        exitOnError(
           chalk.magenta(`
-          Aborting since no collections were chosen
+        Aborting since no collections were chosen
         `)
         );
-        process.exit(1);
       }
     }
   }
+
+  // exit if no collections are found when a lookup returns no matches
+  if (!collectionsToExport.length) {
+    exitOnError(
+      `No collections found based on the provided lookup pattern supplied: ${collectionLookupPattern}`
+    );
+  }
+
+  console.log(
+    chalk.cyan(
+      `Attempting to export ${
+        subCollection ? 'subcollection' : 'collection(s)'
+      }:
+
+    ${chalk.magenta(collectionsToExport.join('\n'))}
+      `
+    )
+  );
+
+  // form the path to store the exported collections
+  const writeCollection = write(
+    Object.assign({}, options, {
+      filePath: options.filePath || formFilePath(),
+      subCollection,
+    })
+  );
+
+  collectionsToExport.forEach(collection => {
+    // fetch all documents in the collection
+    try {
+      writeCollection(collection);
+    } catch (err) {
+      exitOnError(
+        chalk.red(
+          `Error while exporting documents in ${chalk.cyan(
+            collection
+          )} collection: ${err}`
+        )
+      );
+    }
+  });
 };
 
 module.exports = exportCollection;

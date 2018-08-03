@@ -1,10 +1,10 @@
-'use-strict';
+'use strict';
 
 const chalk = require('chalk');
 const fs = require('fs');
 const admin = require('firebase-admin');
 
-const initializeApp = (databaseURL, serviceAccountConfig, options = {}) => {
+const initializeApp = (serviceAccountConfig, options = {}) => {
   console.log(chalk.cyan(`Connecting to firestore project...`));
   let config =
     serviceAccountConfig || process.env.GOOGLE_APPLICATION_CREDENTIALS;
@@ -59,7 +59,6 @@ const initializeApp = (databaseURL, serviceAccountConfig, options = {}) => {
 
     admin.initializeApp({
       credential,
-      databaseURL,
     });
   } catch (err) {
     console.log(chalk.red(`Error initializing firebase project: ${err}`));

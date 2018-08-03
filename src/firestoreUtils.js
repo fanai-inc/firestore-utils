@@ -5,6 +5,7 @@ const program = require('commander');
 const path = require('path');
 const envinfo = require('envinfo');
 const exportCollection = require('./lib/exportCollection');
+const exportDocument = require('./lib/exportDocument');
 const importCollection = require('./lib/importCollection');
 const initializeApp = require('./utils/initializeApp');
 const packageJson = require('../package.json');
@@ -12,16 +13,24 @@ const packageJson = require('../package.json');
 program.version(packageJson.version);
 
 program
-  .command('export <databaseURL> [serviceAccountConfig]')
-  .description('Export document(s) / collection(s) from the specified database')
+  .command('export [serviceAccountConfig]')
+  .description(
+    'Export document(s) / collection(s) from the specified Firestore database'
+  )
   .alias('e')
   .option(
-    '-c, --collections <collections>',
-    'specify a particular collection or collections to export, based on a specified glob pattern. Glob pattern documentation can be found at https://github.com/isaacs/minimatch'
+    '-c, --collections <collectionRef>',
+    `specify a particular collection or collections to export.
+                                             This can be either a path to a subcollection, i.e. col/doc/subcollection
+                                             or a specified glob pattern to match collections located at the root of the db.
+
+                                             Glob pattern documentation can be found at https://github.com/isaacs/minimatch
+
+     `
   )
   .option(
-    '-d, --document <document>',
-    'specify a particular document to export'
+    '-d, --document <documentPath>',
+    'specify a path to a particular document within a given collection to export'
   )
   .option(
     '-o, --out <filePath>',
@@ -33,36 +42,64 @@ program
   )
   .option(
     '-g, --bucketOptions <bucketOptionsFilePath>',
-    'specify a google storage bucket to write to <bucketOptionsFilePath>\n This file is required and configuration options can be found at: https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream'
+    `specify a google storage bucket to write to <bucketOptionsFilePath>
+                                             This file is required and configuration options can be found at:
+                                             https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream
+
+    `
   )
   .option(
     '-s, --defaultServiceAccount',
-    'if set then Firebase authentication will attempt to use the default credentials which are present when running within GCP. More information can be found at: https://firebase.google.com/docs/admin/setup'
+    `If set then Firebase authentication will attempt to use the default credentials
+                                             which are present when running within GCP.
+                                             More information can be found at: https://firebase.google.com/docs/admin/setup
+
+    `
   )
-  .action((databaseURL, serviceAccountConfig, options) => {
-    initializeApp(databaseURL, serviceAccountConfig, options);
+  .option(
+    '-q, --query <queryString>',
+    `run query on returned documents from a given collection.
+                                             Format should be a comma separated list which each index corresponding to the
+                                             parameters described here: https://cloud.google.com/nodejs/docs/reference/firestore/0.15.x/Query#where
+                                             More on queries can be found here: https://cloud.google.com/nodejs/docs/reference/firestore/0.15.x/Query
+    `
+  )
+  .action((serviceAccountConfig, options) => {
+    initializeApp(serviceAccountConfig, options);
 
     const { collections = null, document = null } = options;
+    const mergedOptions = Object.assign(
+      { verbose: program.verbose, cli: true },
+      options
+    );
 
-    if (document && !collections) {
+    if (document && collections) {
       console.log(
-        chalk.red(
-          `Error: Please specify the collection that document ${chalk.cyan(
-            document
-          )} belongs to in-order to export it`
+        chalk.yellow(
+          `Warning: both a document and collection were provided, if you want to export
+       a document please provide a path like collection/doc. If you would like to export a
+       subcollection then you only need to use the -c flag and provide a path to that subcollection.
+
+       Attempting to lookup a document at the following path: ${chalk.magenta(
+         collections + '/' + document
+       )}
+      `
         )
       );
-      process.exit(1);
-    } else if (!document) {
-      exportCollection(
-        collections,
-        Object.assign({ verbose: program.verbose }, options)
+    }
+
+    if (document) {
+      exportDocument(
+        collections ? `${collections}/${document}` : document,
+        mergedOptions
       );
+    } else {
+      exportCollection(collections, mergedOptions);
     }
   });
 
 program
-  .command('import <databaseURL> [serviceAccountConfig]')
+  .command('import [serviceAccountConfig]')
   .description('Import collection(s) into the specified <databaseURL>')
   .alias('i')
   .option(

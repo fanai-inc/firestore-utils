@@ -2,7 +2,7 @@
 'use strict';
 
 const chalk = require('chalk');
-const packageJson = require('./package.json');
+const packageJson = require('../../package.json');
 
 const currentNodeVersion = process.versions.node;
 const semver = currentNodeVersion.split('.');
@@ -15,12 +15,12 @@ if (major < 6) {
       ${chalk.bold.red(currentNodeVersion)}
       \n
       This utility requires node versions ${chalk.bold.green(
-        packageJson.engines.node,
+        packageJson.engines.node
       )}. \n
       Please update your version of Node.
-    `,
+    `
   );
   process.exit(1);
 }
 
-require('./src/firestoreUtils');
+require('../firestoreUtils');
