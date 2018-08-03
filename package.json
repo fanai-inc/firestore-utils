@@ -1,6 +1,6 @@
 {
   "name": "@fanai/firestore-utils",
-  "version": "0.0.1-alpha.8",
+  "version": "1.0.0-alpha.1",
   "description": "CLI for import/export of firestore database",
   "keywords": [
     "javascript",
@@ -14,19 +14,21 @@
     "url": "https://github.com/fanai-inc/firestore-utils/issues",
     "email": "oss@fanai.io"
   },
-  "main": "index.js",
+  "main": "src/bin/index.js",
   "scripts": {
     "test": "jest",
     "lint": "eslint src/**",
     "precommit": "lint-staged",
+    "export": "node src/bin/index.js export",
+    "import": "node src/bin/index.js import",
     "format": "prettier --trailing-comma es5 --single-quote --write 'src/*/*.js' '!(node_modules)/**/*.js'"
   },
   "files": [
-    "index.js",
+    "firestoreUtils.js",
     "/src/**/*"
   ],
   "bin": {
-    "firestore-utils": "./index.js"
+    "firestore-utils": "./src/bin/index.js"
   },
   "author": {
     "name": "Shaun Wallace"
