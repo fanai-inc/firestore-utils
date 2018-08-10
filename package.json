@@ -1,20 +1,24 @@
 {
   "name": "@fanai/firestore-utils",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "CLI for import/export of firestore database",
   "keywords": [
     "javascript",
     "nodejs",
     "cli",
     "firestore",
-    "firebase"
+    "firebase",
+    "cloud-firestore",
+    "firestore-db",
+    "firestore-export",
+    "firestore-import"
   ],
   "homepage": "https://github.com/fanai-inc/firestore-utils/blob/master/README.md",
   "bugs": {
     "url": "https://github.com/fanai-inc/firestore-utils/issues",
     "email": "oss@fanai.io"
   },
-  "main": "src/bin/index.js",
+  "main": "./firestoreUtils.js",
   "scripts": {
     "test": "jest",
     "lint": "eslint src/**",
@@ -23,10 +27,6 @@
     "import": "node src/bin/index.js import",
     "format": "prettier --trailing-comma es5 --single-quote --write 'src/*/*.js' '!(node_modules)/**/*.js'"
   },
-  "files": [
-    "firestoreUtils.js",
-    "./src/**/*"
-  ],
   "bin": {
     "firestore-utils": "./src/bin/index.js"
   },
