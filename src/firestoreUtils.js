@@ -155,20 +155,30 @@ program
   .option('--info', 'print environment debug info')
   .on('--help', () => {
     console.log();
-    console.log(`    Only ${chalk.green('<databaseURL>')} is required.`);
+    console.log(
+      `    Only ${chalk.green(
+        '[serviceAccountConfig]'
+      )} is required if not set as an environmental variable.`
+    );
     console.log();
     console.log(
       `    ${chalk.green(
         '[serviceAccountConfig]'
       )} is the path to the admin sdk service account configuration.
-         Or it is alternatively set via the environmental variable $GOOGLE_APPLICATION_CREDENTIALS.
-         See [Authentication Getting Started](https://cloud.google.com/docs/authentication/getting-started)
+         Or it is alternatively set via the environmental variable ${chalk.green(
+           '$GOOGLE_APPLICATION_CREDENTIALS'
+         )}
+         See [Authentication Getting Started](${chalk.cyan(
+           'https://cloud.google.com/docs/authentication/getting-started'
+         )})
       `
     );
     console.log();
     console.log(
       `    For more information on how to obtain this config see:
-    [Admin SDK setup](https://firebase.google.com/docs/admin/setup)`
+    [Admin SDK setup](${chalk.cyan(
+      'https://firebase.google.com/docs/admin/setup'
+    )})`
     );
     console.log();
     console.log(
@@ -177,28 +187,39 @@ program
     console.log();
     console.log(
       `    Usage:
-           export|e <databaseURL> [serviceAccountConfig] [options]
-           import|i <databaseURL> [serviceAccountConfig] [options]`
+           ${chalk.magenta(
+             'export|e <databaseURL> [serviceAccountConfig] [options]'
+           )}
+           ${chalk.magenta(
+             'import|i <databaseURL> [serviceAccountConfig] [options]'
+           )}`
     );
     console.log();
     console.log(`    Export Options:`);
     console.log(`
-           -c, --collections <collectionLookupPattern>    Glob pattern used to find matches against collections in a given database,
-           -d, --document <documentRef>                   Name of the document within a given collection to export,
-           -o, --out <fileName>, <filePath>               Filename and path to write the exported data to. Path defaults to process.cwd(),
-           -s, --defaultServiceAccount                    Flag that tells the application to lookup the default service account credentials
+           -c, --collections <collectionLookupPattern>      Glob pattern used to find matches against collections in a given database,
+           -d, --document <documentRef>                     Name of the document within a given collection to export,
+           -o, --out <fileName>, <filePath>                 Filename and path to write the exported data to. Path defaults to process.cwd(),
+           -s, --defaultServiceAccount                      Flag that tells the application to lookup the default service account credentials
+           -b, --bucket                                     Name of the Google Cloud Bucket to export the collections/documents to
+           -g, --bucketOptions <bucketOptionsFilePath>      Additional options for bucket storage ${chalk.cyan(
+             'https://cloud.google.com/nodejs/docs/reference/storage/1.7.x/File#createWriteStream'
+           )}
+           -q, --query <queryString>                        Glob pattern used for lookup of specific collections
     `);
     console.log();
     console.log(`    Import Options:`);
     console.log(`
-           -c, --collection <collectionRef>    Name of the collection to export,
-           -p, --filePath <filePath>           Path to the jsonl file to import,
-           -f, --force <force>                 Force import without prompt of overwrite.
+           -c, --collection <collectionRef>                 Name of the collection to export,
+           -p, --filePath <filePath>                        Path to the jsonl file to import,
+           -f, --force <force>                              Force import without prompt of overwrite.
     `);
     console.log(
       `    If you have any problems, do not hesitate to file an issue:`
     );
-    console.log(`    ${chalk.cyan('https://github.com/')}`);
+    console.log(
+      `    ${chalk.cyan('https://github.com/fanai-inc/firestore-utils/issues')}`
+    );
     console.log();
   });
 
