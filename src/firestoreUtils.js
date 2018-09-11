@@ -115,10 +115,10 @@ program
     'force overwrite a given collection [forceOverwrite]',
     false
   )
-  .action((databaseURL, serviceAccountConfig, options) => {
+  .action((serviceAccountConfig, options) => {
     const {
       filePath = '',
-      collection = options.filePath ? path.basename(options.filePath) : null,
+      collection = options.filePath ? path.parse(filePath).name : null,
       force = false,
     } = options;
 
@@ -133,7 +133,7 @@ program
       process.exit(1);
     }
 
-    initializeApp(databaseURL, serviceAccountConfig);
+    initializeApp(serviceAccountConfig, options);
 
     try {
       importCollection(
