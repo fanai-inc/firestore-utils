@@ -25,7 +25,9 @@
     "precommit": "lint-staged",
     "export": "node src/bin/index.js export",
     "import": "node src/bin/index.js import",
-    "format": "prettier --trailing-comma es5 --single-quote --write 'src/*/*.js' '!(node_modules)/**/*.js'"
+    "format": "prettier --trailing-comma es5 --single-quote --write 'src/*/*.js' '!(node_modules)/**/*.js'",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "bin": {
     "firestore-utils": "./src/bin/index.js"
@@ -47,7 +49,8 @@
     "envinfo": "^5.10.0",
     "firebase-admin": "^5.12.1",
     "inquirer": "^6.0.0",
-    "minimatch": "^3.0.4"
+    "minimatch": "^3.0.4",
+    "snyk": "^1.161.1"
   },
   "engines": {
     "node": ">=8.11.3"
@@ -66,5 +69,6 @@
       "yarn format",
       "git add"
     ]
-  }
+  },
+  "snyk": true
 }
